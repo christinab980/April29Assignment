@@ -5,7 +5,7 @@ const pgp = require('pg-promise')();
 
 const server = express();
 server.use(express.json());
-server.use( checkAuth );
+// server.use( checkAuth );
 
 // server.use("/", express.static(__dirname + "/public"));
 
@@ -16,7 +16,7 @@ server.set('view engine', 'html')
 const cn = {
     host: 'localhost',
     port: 5432,
-    database: 'digitalCrafts',
+    database: 'users',
     user: "christinabarron",
     password: ' ',
     allowExitOnIdle: true
@@ -29,6 +29,16 @@ server.get('/heartbeat', (req, res) => {
         "is":"working",
     });
 });
+
+server.get('/test', async (req, res) => {
+    const user = await test();
+    res.json(user)
+});
+
+async function test() {
+    const user = await db.any('SELECT * FROM userAuth', [true]);
+    return user
+};
 
 server.post('/auth/login', (req, res) => {
     res.send(`${req.body.username}, ${req.body.password}`)
